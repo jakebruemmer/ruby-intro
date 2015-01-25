@@ -14,7 +14,9 @@ class LinkedList
 		@size = 0
 
 		@head.next_node = @tail
+		@head.prev_node = nil
 		@tail.prev_node = @head
+		@tail.next_node = nil
 	end
 
 	def add_first(node_to_add)
