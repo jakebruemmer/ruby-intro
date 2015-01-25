@@ -23,11 +23,7 @@ class Beer
 
 	# Check if a number is positive
 	def is_positive?(n)
-		if n > 0
-			return true
-		elsif n <= 0
-			return false
-		end
+		n > 0
 	end
 
 	# Exponent method written using recursion
