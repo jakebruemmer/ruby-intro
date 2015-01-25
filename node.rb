@@ -23,8 +23,15 @@ class Node
 		end
 	end
 
+	def insert_between(behind, after)
+		@prev_node = behind
+		behind.next_node = self
+		@next_node = after
+		after.prev_node = self
+	end
+
 	def to_string
 		puts "(#{value})"
 	end
-	
+
 end
