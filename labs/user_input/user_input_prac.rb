@@ -1,6 +1,7 @@
 #! usr/bin/env ruby
 
 # This is a remake of the nutrition lab from CSE131, but written in Ruby.
+# Instructions for this lab can be found in the user_input.html file
 def calculate_percent(food_part, stated_calories)
 	return ((food_part / stated_calories) * 100).round(2)
 end

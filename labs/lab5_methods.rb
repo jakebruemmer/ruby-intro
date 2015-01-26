@@ -1,4 +1,4 @@
-#! usr/bin/env ruby
+g#! usr/bin/env ruby
 # Implementation of lab5 for 131 in ruby.
 
 class Lab5Methods
@@ -30,8 +30,10 @@ class Lab5Methods
 			return 0.0
 		else
 			sum = 0.0
-			number.times do |count|
+			count = 1
+			number.times do
 				sum += 1.0 / count
+				count += 1
 			end
 			return sum
 		end
@@ -42,8 +44,10 @@ class Lab5Methods
 			return 0.0
 		else
 			sum = 0.0
-			number.times do |count|
+			count = 1
+			number.times do
 				sum += 1.0 / (2**count)
+				count += 1
 			end
 			return sum
 		end

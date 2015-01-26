@@ -6,7 +6,7 @@ class Polynomial
 
 	attr_accessor :list
 
-	# Things in the LinkedList are not indexed from zero.
+	# Things in the LinkedList are indexed from zero.
 
 	def initialize
 		@list = LinkedList.new
@@ -16,6 +16,7 @@ class Polynomial
 		count = 0
 		@list.each do |list_item|
 			puts "#{list_item}x^#{count} +"
+			count += 1
 		end
 	end
 
@@ -44,10 +45,13 @@ class Polynomial
 			if @list.size == 1
 				return derivative
 			else
-				index = 2
-				iterations = @list.size - 1
-				iterations.times do |this|
-					derivative.add_term(@list.get_index(index) * index)
+				# Polynomial should be indexed from 0
+				(@list.size - 1).times do |index|
+					# Unless statement makes sure that the x^1 term from the original polynomial becomes the 1st
+					# term in the returned "derivative" polynomial.
+					unless index == 0
+						derivative.add_term(@list.get_index(index) * index)
+					end
 				end
 				return derivative
 			end
@@ -69,8 +73,7 @@ class Polynomial
 				self_smaller = true
 			end
 
-			count = 0
-			iterations.times do |this|
+			iterations.times do |count|
 				if count <= other_polynomial.list.size 
 					result.add_term(@list.get_index(count) + other_polynomial.list.get_index(count))
 				else
@@ -89,8 +92,7 @@ class Polynomial
 		if @list.size != other_polynomial.list.size
 			return false
 		end
-		index = 1
-		@list.size.times do |this|
+		@list.size.times do |index|
 			if @list.get_index(index) != other_polynomial.list.get_index(index)
 				return false
 			end
