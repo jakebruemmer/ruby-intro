@@ -7,9 +7,7 @@ class Lab5Methods
 	# suite.
 	def self.sum_down_by_2(number)
 		sum = 0
-		if !number.is_a?(Integer)
-			number = number.to_i
-		end
+		number = number.to_i
 
 		if number < 0
 			return 0
@@ -17,23 +15,23 @@ class Lab5Methods
 			return 1
 		else
 
-			while number >= 0
+			while number > 0
 				sum += number
 				number -= 2
 			end
-			return sum
+			sum
 		end
 	end
 
 	def self.harmonic_sum(number)
 		if number < 1
-			return 0.0
+			0.0
 		else
 			sum = 0.0
 			number.times do |count|
 				sum += 1.0 / count
 			end
-			return sum
+			sum
 		end
 	end
 
