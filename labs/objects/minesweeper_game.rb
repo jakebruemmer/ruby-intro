@@ -17,7 +17,11 @@ class MinesweeperGame
         elsif @board["(#{row}, #{column})"].been_flagged
           print "[|>] "
         else
-          print "[ " + @board["(#{row}, #{column})"].adjacent_bombs.to_s + "] "
+          if @board["(#{row}, #{column})"].adjacent_bombs > 0 
+            print "[ " + @board["(#{row}, #{column})"].adjacent_bombs.to_s + "] "
+          else
+            print "[--] "
+          end
         end
       end
       puts
@@ -56,6 +60,9 @@ class MinesweeperGame
       @game_over = true
     else
       @board["(#{row}, #{column})"].been_played = true
+      if @board["(#{row}, #{column})"].adjacent_bombs == 0
+        @board["(#{row}, #{column})"].play_adjacent_zeroes
+      end
     end
   end
  

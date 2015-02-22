@@ -4,14 +4,35 @@ require_relative 'minesweeper_game'
 
 puts "Welcome to the game of minesweeper!"
 puts "-----------------------------------"
-# puts "What difficulty would you like to play with? 1 for expert, 2 for hard, 3 for medium, and 4 for easy"
-# difficulty = gets.chomp.to_i
+puts "Please enter the amount of rows that you would like to play with, anything more than 20 will be truncated."
+rows = gets.chomp.to_i
+
+while !rows.is_a?(Integer) do
+  puts "Please enter the amount of rows that you would like to play with, anything more than 20 will be truncated."
+  rows = gets.chomp.to_i
+end
+
+puts "Please enter the amount of rows that you would like to play with, anything more than 20 will be truncated."
+cols = gets.chomp.to_i
+
+while !cols.is_a?(Integer) do
+  puts "Please enter the amount of rows that you would like to play with, anything more than 20 will be truncated."
+  cols = gets.chomp.to_i
+end
+
+puts "Please enter the % chance you want for a bomb to occur"
+bomb_chance = gets.chomp.to_f
+
+while !bomb_chance.is_a?(Float) do
+  puts "Please enter the % chance you want for a bomb to occur"
+  bomb_chance = gets.chomp.to_f
+end
 
 # Create the board
 board = {}
-4.times do |row|
-  4.times do |column|
-    if rand < 0.25
+rows.times do |row|
+  cols.times do |column|
+    if rand < bomb_chance
       board["(#{row}, #{column})"] = GameTile.new(nil, nil, nil, nil, nil, nil, nil, nil, true)
     else
       board["(#{row}, #{column})"] = GameTile.new(nil, nil, nil, nil, nil, nil, nil, nil, false)
@@ -35,15 +56,15 @@ board = {}
   end
 end
 
-4.times do |row|
-  4.times do |column|
+rows.times do |row|
+  cols.times do |column|
 
     # Set the right pointer object based on objects that have already been created.
-    if column < 3
+    if column < cols - 1
       board["(#{row}, #{column})"].adjacent["right"] = board["(#{row}, #{column + 1})"]
     end
 
-    if row < 3
+    if row < rows - 1
       board["(#{row}, #{column})"].adjacent["down_left"] = board["(#{row + 1}, #{column - 1})"]
       board["(#{row}, #{column})"].adjacent["down"] = board["(#{row + 1}, #{column})"]
       board["(#{row}, #{column})"].adjacent["down_right"] = board["(#{row + 1}, #{column + 1})"]
@@ -55,10 +76,11 @@ end
 # Search for bombs
 board.each do |key, value|
   value.find_adjacent_bombs
+  value.find_adjacent_zeroes
 end
 
 # Use the MinesweeperGame class to play the game
-game = MinesweeperGame.new(board, 4, 4)
+game = MinesweeperGame.new(board, rows, cols)
 
 game.print_the_board
 while !game.game_over? do

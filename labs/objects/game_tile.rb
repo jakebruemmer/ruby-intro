@@ -5,7 +5,7 @@
 
 class GameTile
 
-  attr_accessor :adjacent, :adjacent_bombs, :been_played, :been_flagged
+  attr_accessor :adjacent, :adjacent_bombs, :been_played, :been_flagged, :adjacent_zeroes
 
   def initialize(up_left, up, up_right, left, right, down_left, down, down_right, is_bomb)
     @adjacent = {
@@ -20,6 +20,7 @@ class GameTile
     }
     @is_bomb = is_bomb
     @adjacent_bombs = 0
+    @adjacent_zeroes = {}
     @been_played = false
     @been_flagged = false
   end
@@ -33,8 +34,33 @@ class GameTile
           @adjacent_bombs += 1
         end
       rescue
+        # This rescue catches the NoMethodError that arises when trying to call the find_adjacent_bombs 
+        # method on an edge cell. The error arises when trying to access the is_bomb attribute of a 
+        # nil class. Hence, the NoMethodError.
       end
     end
+  end
+
+  # This method will "play" all of the adjacent cells that have zero mines surrounding them.
+  # The minesweeper game that comes standard with most computers has this behavior.
+  def find_adjacent_zeroes
+    @adjacent.each do |key, value|
+      begin  
+        if value.adjacent_bombs == 0
+          @adjacent_zeroes[key] = value
+        end
+      rescue
+      end
+    end 
+  end
+  
+  def play_adjacent_zeroes
+    @adjacent_zeroes.each do |key, value|
+      value.adjacent_zeroes.each do |key1, value1|
+        value1.been_played = true
+      end
+    end
+
   end
 
   def is_bomb?
