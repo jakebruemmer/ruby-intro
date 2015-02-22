@@ -1,10 +1,11 @@
 #! usr/bin/env ruby
 require_relative 'game_tile'
+require_relative 'minesweeper_game'
 
 puts "Welcome to the game of minesweeper!"
 puts "-----------------------------------"
-puts "What difficulty would you like to play with? 1 for expert, 2 for hard, 3 for medium, and 4 for easy"
-difficulty = gets.chomp.to_i
+# puts "What difficulty would you like to play with? 1 for expert, 2 for hard, 3 for medium, and 4 for easy"
+# difficulty = gets.chomp.to_i
 
 # Create the board
 board = {}
@@ -56,25 +57,18 @@ board.each do |key, value|
   begin 
     value.find_adjacent_bombs
   rescue
+    # This rescue catches the NoMethodError that arises when trying to call the find_adjacent_bombs 
+    # method on an edge cell. The error arises when trying to access the is_bomb attribute of a 
+    # nil class. Hence, the NoMethodError.
   end
 end
 
-4.times do |row|
-  4.times do |column|
-    print board["(#{row}, #{column})"].adjacent_bombs.to_s + " "
-  end
-  puts ''
-end
+puts board
+# Use the MinesweeperGame class to play the game
+game = MinesweeperGame.new(board, 4, 4)
 
-4.times do |row|
-  4.times do |column|
-    if board["(#{row}, #{column})"].is_bomb?
-      print "* "
-    else 
-      print ". "
-    end
-  end
-  puts ''
+game.print_the_board
+while !game.game_over? do
+ game.play_the_game
 end
-
 
