@@ -7,18 +7,19 @@ class MinesweeperGame
     @rows = rows
     @columns = columns
     @game_over = false
+    @win = false
   end
 
   def print_the_board
     @rows.times do |row|
       @columns.times do |column|
-        if !@board["(#{row}, #{column})"].been_played
+        if !@board.board["(#{row}, #{column})"].been_played
           print "[  ] "
-        elsif @board["(#{row}, #{column})"].been_flagged
+        elsif @board.board["(#{row}, #{column})"].been_flagged
           print "[|>] "
         else
-          if @board["(#{row}, #{column})"].adjacent_bombs > 0 
-            print "[ " + @board["(#{row}, #{column})"].adjacent_bombs.to_s + "] "
+          if @board.board["(#{row}, #{column})"].adjacent_bombs > 0 
+            print "[ " + @board.board["(#{row}, #{column})"].adjacent_bombs.to_s + "] "
           else
             print "[--] "
           end
@@ -56,27 +57,39 @@ class MinesweeperGame
   end
 
   def play_tile(row, column)
-    if @board["(#{row}, #{column})"].is_bomb?
+    if @board.board["(#{row}, #{column})"].is_bomb?
       @game_over = true
     else
-      @board["(#{row}, #{column})"].been_played = true
-      if @board["(#{row}, #{column})"].adjacent_bombs == 0
-        @board["(#{row}, #{column})"].play_adjacent_zeroes
+      @board.board["(#{row}, #{column})"].been_played = true
+      @board.num_played += 1
+      if @board.board["(#{row}, #{column})"].adjacent_bombs == 0
+        @board.board["(#{row}, #{column})"].play_adjacent_zeroes
+      end
+      if @board.num_played == @board.win_value
+        @win = true
       end
     end
   end
  
   def flag_tile(row, column)
-    if @board["(#{row}, #{column})"].been_flagged
-      @board["(#{row}, #{column})"].been_flagged = false
+    if @board.board["(#{row}, #{column})"].been_flagged
+      @board.board["(#{row}, #{column})"].been_flagged = false
     else
-      @board["(#{row}, #{column})"].been_flagged = true
-      @board["(#{row}, #{column})"].been_played = true
+      @board.board["(#{row}, #{column})"].been_flagged = true
+      @board.board["(#{row}, #{column})"].been_played = true
+      @board.num_played += 1
+      if @board.num_played == @board.win_value
+        @win = true
+      end
     end
   end
 
   def game_over?
     @game_over
+  end
+
+  def win?
+    @win
   end
   
 end
