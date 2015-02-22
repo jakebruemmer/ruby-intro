@@ -63,7 +63,6 @@ board.each do |key, value|
   end
 end
 
-puts board
 # Use the MinesweeperGame class to play the game
 game = MinesweeperGame.new(board, 4, 4)
 

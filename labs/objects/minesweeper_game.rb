@@ -35,14 +35,14 @@ class MinesweeperGame
       puts
       player_choice = gets.chomp
     end
-    
-    play_tile(player_choice[0], player_choice[1])
+    match = /(\d), (\d)$/.match(player_choice)    
+    play_tile(match[1], match[2])
     print_the_board
   end
 
   def play_tile(row, column)
     if @board["(#{row}, #{column})"].is_bomb?
-      end_game
+      @game_over = true
     else
       @board["(#{row}, #{column})"].been_played = true
     end
@@ -52,9 +52,5 @@ class MinesweeperGame
     @game_over
   end
   
-  def end_game
-    @game_over = true
-  end
-
 end
 
