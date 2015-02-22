@@ -13,30 +13,41 @@ class MinesweeperGame
     @rows.times do |row|
       @columns.times do |column|
         if !@board["(#{row}, #{column})"].been_played
-          print "[ ] "
+          print "[  ] "
+        elsif @board["(#{row}, #{column})"].been_flagged
+          print "[|>] "
         else
-          print "[" + @board["(#{row}, #{column})"].adjacent_bombs.to_s + "] "
+          print "[ " + @board["(#{row}, #{column})"].adjacent_bombs.to_s + "] "
         end
       end
-      puts 
+      puts
     end
   end
 
   def play_the_game
     puts "Please put two numbers corresponding to the row and column that you'd like to play in the form"
-    puts "<row>, <column>"
+    puts "<pf> <row>, <column>"
     puts
     player_choice = gets.chomp
 
     # Now match the player response with a regular expression
-    while /(\d), (\d)$/.match(player_choice) == nil
+    while /([pf]) (\d), (\d)$/.match(player_choice) == nil
       puts "Please put two numbers corresponding to the row and column that you'd like to play in the form"
-      puts "<row>, <column>"
+      puts "<pf> <row>, <column>"
       puts
       player_choice = gets.chomp
     end
-    match = /(\d), (\d)$/.match(player_choice)    
-    play_tile(match[1], match[2])
+    match = /([pf]) (\d), (\d)$/.match(player_choice)    
+    # A 'p' character indicates that the player wants to "play" the tile.
+    # An 'f' character indicates that the player would like to flag the
+    # tile because they believe there to be a bomb there. Flagged tiles
+    # may still be played after they have been flagged.
+    if match[1] == 'p'
+      play_tile(match[2].to_i - 1, match[3].to_i - 1)
+    elsif match[1] == 'f'
+      flag_tile(match[2].to_i - 1, match[3].to_i - 1)
+    end
+    puts
     print_the_board
   end
 
@@ -47,7 +58,16 @@ class MinesweeperGame
       @board["(#{row}, #{column})"].been_played = true
     end
   end
-  
+ 
+  def flag_tile(row, column)
+    if @board["(#{row}, #{column})"].been_flagged
+      @board["(#{row}, #{column})"].been_flagged = false
+    else
+      @board["(#{row}, #{column})"].been_flagged = true
+      @board["(#{row}, #{column})"].been_played = true
+    end
+  end
+
   def game_over?
     @game_over
   end

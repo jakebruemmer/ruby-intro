@@ -1,4 +1,3 @@
-#! usr/bin/env ruby
 
 # An object oriented take on the minesweeper game that's done in 131.
 # Since it is un-Rubylike to use 2d arrays, I'm going to try and 
@@ -6,7 +5,7 @@
 
 class GameTile
 
-  attr_accessor :adjacent, :adjacent_bombs, :been_played
+  attr_accessor :adjacent, :adjacent_bombs, :been_played, :been_flagged
 
   def initialize(up_left, up, up_right, left, right, down_left, down, down_right, is_bomb)
     @adjacent = {
@@ -22,14 +21,18 @@ class GameTile
     @is_bomb = is_bomb
     @adjacent_bombs = 0
     @been_played = false
+    @been_flagged = false
   end
 
   # Method will iterate through the surrounding GameTiles to check how many bombs there are.
   # The method returns the number of bombs that are adjacent to itself.
   def find_adjacent_bombs
     @adjacent.each do |key, value|
-      if value.is_bomb?
-        @adjacent_bombs += 1
+      begin
+        if value.is_bomb?
+          @adjacent_bombs += 1
+        end
+      rescue
       end
     end
   end

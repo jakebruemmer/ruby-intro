@@ -54,13 +54,7 @@ end
 
 # Search for bombs
 board.each do |key, value|
-  begin 
-    value.find_adjacent_bombs
-  rescue
-    # This rescue catches the NoMethodError that arises when trying to call the find_adjacent_bombs 
-    # method on an edge cell. The error arises when trying to access the is_bomb attribute of a 
-    # nil class. Hence, the NoMethodError.
-  end
+  value.find_adjacent_bombs
 end
 
 # Use the MinesweeperGame class to play the game
@@ -70,4 +64,6 @@ game.print_the_board
 while !game.game_over? do
  game.play_the_game
 end
+
+puts "Oops! You selected a bomb. Please play again!"
 
